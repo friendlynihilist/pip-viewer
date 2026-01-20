@@ -14,12 +14,35 @@
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .page-number {
   font-weight: 400;
   color: #000000;
   opacity: 0.5;
+}
+
+.view-toggle {
+  padding: 6px 12px;
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 0;
+  font-size: 9px;
+  font-weight: 400;
+  color: #000000;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.view-toggle:hover {
+  background-color: #000000;
+  color: #ffffff;
 }
 
 .xml-content {
@@ -191,6 +214,27 @@
   background-color: #ffebee;
   border-radius: 4px;
   text-align: center;
+}
+
+/* Reading View - Clean text for reading */
+.xml-content.reading-view del,
+.xml-content.reading-view .tei-del {
+  display: none;
+}
+
+.xml-content.reading-view sup,
+.xml-content.reading-view .tei-add {
+  font-size: inherit;
+  vertical-align: baseline;
+  color: inherit;
+  position: static;
+  top: auto;
+  line-height: inherit;
+}
+
+.xml-content.reading-view sup::after,
+.xml-content.reading-view .tei-add::after {
+  display: none;
 }
 
 /* Scrollbar styling */

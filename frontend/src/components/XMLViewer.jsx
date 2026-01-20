@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './XMLViewer.css';
 
 /**
@@ -24,19 +24,7 @@ function transformTEItoHTML(xmlContent) {
     // Recursively transform TEI nodes to HTML
     function transformNode(node) {
       if (node.nodeType === Node.TEXT_NODE) {
-        // Handle bracketed markup in text content
-        let text = node.textContent;
-        text = text.replace(/\[circled\]/g, '<span class="tei-encircled">');
-        text = text.replace(/\[\/circled\]/g, '</span>');
-        text = text.replace(/\[encircle\]/g, '<span class="tei-encircled">');
-        text = text.replace(/\[\/encircle\]/g, '</span>');
-        text = text.replace(/\[strikethrough\]/g, '<del>');
-        text = text.replace(/\[\/strikethrough\]/g, '</del>');
-        text = text.replace(/\[insertion\]/g, '<sup class="tei-add">');
-        text = text.replace(/\[\/insertion\]/g, '</sup>');
-        text = text.replace(/\[box\]/g, '<span class="tei-boxed">');
-        text = text.replace(/\[\/box\]/g, '</span>');
-        return text;
+        return node.textContent;
       }
 
       if (node.nodeType !== Node.ELEMENT_NODE) {
@@ -146,6 +134,7 @@ function transformTEItoHTML(xmlContent) {
  */
 export default function XMLViewer({ pageData }) {
   const contentRef = useRef(null);
+  const [viewMode, setViewMode] = useState('diplomatic'); // 'diplomatic' or 'reading'
 
   useEffect(() => {
     if (contentRef.current && pageData) {
@@ -156,6 +145,10 @@ export default function XMLViewer({ pageData }) {
       contentRef.current.scrollTop = 0;
     }
   }, [pageData]);
+
+  const toggleViewMode = () => {
+    setViewMode(viewMode === 'diplomatic' ? 'reading' : 'diplomatic');
+  };
 
   if (!pageData) {
     return (
@@ -171,8 +164,18 @@ export default function XMLViewer({ pageData }) {
     <div className="xml-viewer">
       <div className="page-info">
         <span className="page-number">Page {pageData.pageNumber}</span>
+        <button
+          className="view-toggle"
+          onClick={toggleViewMode}
+          title={viewMode === 'diplomatic' ? 'Switch to Reading View' : 'Switch to Diplomatic View'}
+        >
+          {viewMode === 'diplomatic' ? 'Reading View' : 'Diplomatic View'}
+        </button>
       </div>
-      <div className="xml-content" ref={contentRef}>
+      <div
+        className={`xml-content ${viewMode === 'reading' ? 'reading-view' : ''}`}
+        ref={contentRef}
+      >
         {/* Content will be inserted via innerHTML */}
       </div>
     </div>
