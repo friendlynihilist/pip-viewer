@@ -47,6 +47,21 @@ java -version
 npm --version
 ```
 
+## Manuscript Images
+
+The manuscript images for this project need to be downloaded separately due to their size (~630MB).
+
+**Download the images here**: [ADD YOUR LINK HERE]
+
+After downloading, extract the images to `cantaloupe/images/` directory:
+
+```bash
+# After downloading the images archive
+unzip images.zip -d cantaloupe/images/
+# or
+tar -xzf images.tar.gz -C cantaloupe/images/
+```
+
 ## Quick Installation (Recommended)
 
 ### Automated Setup
