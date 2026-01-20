@@ -47,7 +47,20 @@ java -version
 npm --version
 ```
 
-## Manuscript Images
+## Quick Installation (Recommended)
+
+### Step 1: Clone and Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/friendlynihilist/pip-viewer.git
+cd pip-viewer
+
+# Run initial setup (installs dependencies and Cantaloupe)
+./setup.sh
+```
+
+### Step 2: Download Manuscript Images
 
 The manuscript images for this project need to be downloaded separately due to their size (~630MB).
 
@@ -62,18 +75,14 @@ unzip images.zip -d cantaloupe/images/
 tar -xzf images.tar.gz -C cantaloupe/images/
 ```
 
-## Quick Installation (Recommended)
+Alternatively, to test immediately with placeholder images:
+```bash
+./create-sample-images.sh
+```
 
-### Automated Setup
+### Step 3: Start the Application
 
 ```bash
-# 1. Initial setup (installs everything automatically)
-./setup.sh
-
-# 2. Create test images (optional, to test immediately)
-./create-sample-images.sh
-
-# 3. Start the application
 ./start.sh
 ```
 
