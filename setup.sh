@@ -22,7 +22,23 @@ echo "✓ Node.js $(node --version)"
 
 # Java
 if ! command -v java &> /dev/null; then
-    echo "❌ Java not found. Please install Java 11+ from https://adoptium.net/"
+    echo "❌ Java not found"
+    echo ""
+    echo "Java is required to run the IIIF image server (Cantaloupe)."
+    echo "Please install Java 11 or higher:"
+    echo ""
+    echo "macOS:"
+    echo "  brew install openjdk@11"
+    echo "  OR download from: https://adoptium.net/temurin/releases/?os=mac"
+    echo ""
+    echo "Windows:"
+    echo "  winget install EclipseAdoptium.Temurin.11"
+    echo "  OR download from: https://adoptium.net/temurin/releases/?os=windows"
+    echo ""
+    echo "Linux (Ubuntu/Debian):"
+    echo "  sudo apt update && sudo apt install openjdk-11-jdk"
+    echo ""
+    echo "After installing Java, run ./setup.sh again."
     exit 1
 fi
 echo "✓ Java $(java -version 2>&1 | head -n 1)"
