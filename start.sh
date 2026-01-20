@@ -58,22 +58,22 @@ fi
 
 echo "Starting Cantaloupe IIIF Server..."
 cd cantaloupe
-java -Dcantaloupe.config=./cantaloupe.properties -Xmx2g -jar cantaloupe-5.0.6/cantaloupe-5.0.6.jar > cantaloupe.log 2>&1 &
+java -Dcantaloupe.config=./cantaloupe.properties -Xmx2g -jar cantaloupe-5.0.6/cantaloupe-5.0.6.jar &
 CANTALOUPE_PID=$!
 cd ..
 
-echo "✓ Cantaloupe started (PID: $CANTALOUPE_PID)"
+echo "✓ Cantaloupe starting (PID: $CANTALOUPE_PID)"
 echo "  IIIF Server: http://localhost:8182"
 echo ""
 
 # Wait for Cantaloupe to start completely
-echo "Waiting for Cantaloupe to start..."
+echo "Waiting for Cantaloupe to initialize (this takes ~8 seconds)..."
 sleep 8
 
 # Verify that Cantaloupe actually started
 if ! ps -p $CANTALOUPE_PID > /dev/null; then
     echo "❌ Cantaloupe failed to start"
-    echo "Check cantaloupe/cantaloupe.log for errors"
+    echo "Please check for errors above"
     exit 1
 fi
 
@@ -82,28 +82,18 @@ echo ""
 
 echo "Starting Frontend..."
 cd frontend
-npm run dev > ../frontend.log 2>&1 &
+npm run dev &
 FRONTEND_PID=$!
 cd ..
 
-echo "✓ Frontend started (PID: $FRONTEND_PID)"
 echo ""
-
-# Wait for frontend to start
-sleep 3
-
 echo "=========================================="
 echo "  Application Started!"
 echo "=========================================="
 echo ""
-echo "  🌐 Viewer: http://localhost:5173"
-echo "  🖼️  IIIF:   http://localhost:8182"
+echo "The frontend URL will appear above (usually http://localhost:5173)"
 echo ""
 echo "Press Ctrl+C to stop all services"
-echo ""
-echo "Real-time logs:"
-echo "  - Cantaloupe: tail -f cantaloupe/cantaloupe.log"
-echo "  - Frontend:   tail -f frontend.log"
 echo ""
 
 # Wait for one of the processes to terminate
