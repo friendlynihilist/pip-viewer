@@ -47,48 +47,63 @@ java -version
 npm --version
 ```
 
-## Quick Installation (Recommended)
+## Quick Start (Test with Sample Data)
 
-### Step 1: Clone and Setup
+**Try the viewer immediately with placeholder images:**
 
 ```bash
-# Clone the repository
+# 1. Clone and setup
 git clone https://github.com/friendlynihilist/pip-viewer.git
 cd pip-viewer
-
-# Run initial setup (installs dependencies and Cantaloupe)
 ./setup.sh
+
+# 2. Create sample images
+./create-sample-images.sh
+
+# 3. Start the application
+./start.sh
 ```
 
-### Step 2: Download Manuscript Images
+The viewer will open at `http://localhost:5173` with a sample TEI document and 4 placeholder images.
 
-The manuscript images for this project need to be downloaded separately due to their size (~630MB).
+To stop: press `Ctrl+C`
+
+## Using the Full Manuscript
+
+To view the complete manuscript (700+ pages) with real images:
+
+### Step 1: Download Manuscript Images
+
+The manuscript images need to be downloaded separately due to their size (~630MB).
 
 **Download the images here**: [ADD YOUR LINK HERE]
 
-After downloading, extract the images to `cantaloupe/images/` directory:
+After downloading, extract to `cantaloupe/images/`:
 
 ```bash
-# After downloading the images archive
+# Extract images archive
 unzip images.zip -d cantaloupe/images/
 # or
 tar -xzf images.tar.gz -C cantaloupe/images/
 ```
 
-Alternatively, to test immediately with placeholder images:
-```bash
-./create-sample-images.sh
+### Step 2: Update the TEI File Reference
+
+Edit `frontend/src/components/App.jsx` (line ~38):
+
+```javascript
+// Change from:
+const data = await parseTEI('/sample-data/sample.xml');
+
+// To:
+const data = await parseTEI('/sample-data/hou02614c00333_tei.xml');
 ```
 
-### Step 3: Start the Application
+### Step 3: Restart the Application
 
 ```bash
 ./start.sh
 ```
-
-The viewer will open at `http://localhost:5173`
-
-To stop: press `Ctrl+C`
 
 **To use your own documents**, see: [QUICK-START.md](QUICK-START.md)
 
