@@ -1,0 +1,214 @@
+.xml-viewer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.page-info {
+  padding: 12px 32px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 10px;
+  color: #000000;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.page-number {
+  font-weight: 400;
+  color: #000000;
+  opacity: 0.5;
+}
+
+.xml-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 48px;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #000000;
+}
+
+.xml-content.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Stili per elementi TEI trasformati */
+.xml-content .tei-p {
+  margin-bottom: 1em;
+  text-align: justify;
+}
+
+.xml-content .tei-head {
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+  font-weight: bold;
+  color: #222;
+}
+
+.xml-content .tei-lg {
+  margin: 1em 0;
+  padding-left: 2em;
+}
+
+.xml-content .tei-l {
+  margin-bottom: 0.3em;
+}
+
+.xml-content .tei-quote {
+  margin: 1em 2em;
+  padding: 1em;
+  background-color: #f5f5f5;
+  border-left: 4px solid #ccc;
+  font-style: italic;
+}
+
+.xml-content .tei-note {
+  font-size: 0.9em;
+  color: #666;
+  padding: 0.5em;
+  margin: 0.5em 0;
+  background-color: #f9f9f9;
+  border-left: 3px solid #999;
+}
+
+.xml-content .tei-foreign {
+  font-style: italic;
+}
+
+.xml-content .tei-title {
+  font-style: italic;
+}
+
+.xml-content .tei-list {
+  margin: 1em 0;
+  padding-left: 2em;
+}
+
+.xml-content .tei-item {
+  margin-bottom: 0.5em;
+}
+
+/* Stili per rendering attributes */
+.xml-content .rend-italic {
+  font-style: italic;
+}
+
+.xml-content .rend-bold {
+  font-weight: bold;
+}
+
+.xml-content .rend-underline {
+  text-decoration: underline;
+}
+
+/* Deletions and additions */
+.xml-content del,
+.xml-content .tei-del {
+  text-decoration: line-through;
+  color: #d32f2f;
+  opacity: 0.7;
+}
+
+.xml-content sup,
+.xml-content .tei-add {
+  font-size: 0.7em;
+  vertical-align: super;
+  color: #388e3c;
+  font-weight: 400;
+  position: relative;
+  top: -0.3em;
+  line-height: 0;
+}
+
+/* Curved line connecting insertion to insertion point */
+.xml-content sup::after,
+.xml-content .tei-add::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 0.5em;
+  height: 0.8em;
+  border-left: 1px solid #388e3c;
+  border-bottom: 1px solid #388e3c;
+  border-bottom-left-radius: 0.4em;
+  opacity: 0.6;
+}
+
+/* Underlines */
+.xml-content .tei-underline {
+  text-decoration: underline;
+}
+
+.xml-content .tei-underline-colored {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+/* Encircled text */
+.xml-content .tei-encircled {
+  display: inline-block;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  padding: 0.1em 0.3em;
+  min-width: 1.5em;
+  text-align: center;
+}
+
+/* Boxed text */
+.xml-content .tei-boxed {
+  display: inline-block;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  padding: 0.1em 0.4em;
+  font-weight: 500;
+}
+
+/* Unclear text */
+.xml-content .tei-unclear {
+  opacity: 0.5;
+  font-style: italic;
+  text-decoration: underline dotted;
+  text-decoration-color: #999;
+}
+
+/* Messaggi */
+.empty-message {
+  color: #999;
+  font-size: 18px;
+  text-align: center;
+}
+
+.error-message {
+  color: #d32f2f;
+  padding: 20px;
+  background-color: #ffebee;
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* Scrollbar styling */
+.xml-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.xml-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.xml-content::-webkit-scrollbar-thumb {
+  background: #000000;
+  opacity: 0.2;
+  border-radius: 0;
+}
+
+.xml-content::-webkit-scrollbar-thumb:hover {
+  background: #000000;
+  opacity: 0.4;
+}

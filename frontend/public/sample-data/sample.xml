@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>Esempio di Documento TEI per Viewer</title>
+        <author>Autore di Esempio</author>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>TEI-IIIF Viewer Demo</publisher>
+        <date>2026</date>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Documento di esempio creato per dimostrare le funzionalità del TEI-IIIF Viewer</p>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+
+  <facsimile>
+    <surface xml:id="page1">
+      <graphic url="page-1.jpg"/>
+    </surface>
+    <surface xml:id="page2">
+      <graphic url="page-2.jpg"/>
+    </surface>
+    <surface xml:id="page3">
+      <graphic url="page-3.jpg"/>
+    </surface>
+    <surface xml:id="page4">
+      <graphic url="page-4.jpg"/>
+    </surface>
+  </facsimile>
+
+  <text>
+    <body>
+      <div type="chapter" n="1">
+        <pb facs="#page1"/>
+        <head>Capitolo Primo: Introduzione al TEI</head>
+
+        <p>La Text Encoding Initiative (TEI) è uno standard internazionale per la codifica di testi in formato digitale. Questo documento dimostra come il viewer TEI-IIIF permette di visualizzare simultaneamente il testo codificato e le relative immagini delle pagine originali.</p>
+
+        <p>Il sistema di paginazione è basato sugli elementi <hi rend="italic">page break</hi> (pb) che contengono riferimenti alle immagini tramite l'attributo <hi rend="bold">facs</hi>. Ogni volta che si cambia pagina, sia il testo che l'immagine vengono aggiornati in modo sincronizzato.</p>
+
+        <quote>La digitalizzazione dei testi antichi richiede non solo la trascrizione accurata del contenuto, ma anche la preservazione dell'aspetto visivo originale del documento.</quote>
+
+        <p>Questo viewer utilizza il protocollo IIIF (International Image Interoperability Framework) per la gestione delle immagini, permettendo funzionalità avanzate come zoom, pan e rotazione delle immagini ad alta risoluzione.</p>
+      </div>
+
+      <div type="chapter" n="2">
+        <pb facs="#page2"/>
+        <head>Capitolo Secondo: Funzionalità del Viewer</head>
+
+        <p>Il viewer offre diverse funzionalità per la consultazione dei documenti TEI:</p>
+
+        <list>
+          <item>Visualizzazione sincronizzata di testo e immagini</item>
+          <item>Paginazione tramite controlli Previous/Next</item>
+          <item>Salto diretto a una pagina specifica</item>
+          <item>Zoom e pan sulle immagini IIIF</item>
+          <item>Rendering intelligente degli elementi TEI in HTML</item>
+        </list>
+
+        <p>Il pannello di sinistra mostra il testo codificato in TEI, trasformato automaticamente in HTML leggibile. Gli elementi come <hi rend="italic">paragrafi</hi>, <hi rend="bold">intestazioni</hi>, citazioni e liste vengono renderizzati con stili appropriati.</p>
+
+        <p>Il pannello di destra utilizza <name>OpenSeadragon</name>, una libreria JavaScript potente per la visualizzazione di immagini ad alta risoluzione. Le immagini vengono servite tramite un server IIIF (Cantaloupe) che supporta il formato tile per caricamenti efficienti anche di immagini molto grandi.</p>
+      </div>
+
+      <div type="chapter" n="3">
+        <pb facs="#page3"/>
+        <head>Capitolo Terzo: Architettura del Sistema</head>
+
+        <p>L'architettura del viewer è modulare e si compone di tre parti principali:</p>
+
+        <div type="section">
+          <head>Frontend React</head>
+          <p>Il frontend è sviluppato in React con Vite come build tool. I componenti principali includono:</p>
+          <list>
+            <item><hi rend="bold">XMLViewer</hi>: gestisce la visualizzazione e trasformazione del testo TEI</item>
+            <item><hi rend="bold">ImageViewer</hi>: integra OpenSeadragon per le immagini IIIF</item>
+            <item><hi rend="bold">Pagination</hi>: fornisce i controlli di navigazione</item>
+          </list>
+        </div>
+
+        <div type="section">
+          <head>Parser TEI</head>
+          <p>Il parser analizza il documento TEI e:</p>
+          <list>
+            <item>Estrae i metadati dal teiHeader</item>
+            <item>Identifica tutti i page breaks (pb)</item>
+            <item>Crea una mappa delle pagine con i relativi riferimenti alle immagini</item>
+            <item>Gestisce sia riferimenti interni (#id) che URL diretti</item>
+          </list>
+        </div>
+
+        <p>I servizi di supporto includono il parser XML e il servizio IIIF per la gestione degli URL delle immagini.</p>
+      </div>
+
+      <div type="chapter" n="4">
+        <pb facs="#page4"/>
+        <head>Capitolo Quarto: Estensioni Future</head>
+
+        <p>Il viewer è progettato con un'architettura estensibile che permette future implementazioni di funzionalità avanzate:</p>
+
+        <div type="section">
+          <head>Annotazioni IIIF</head>
+          <p>Una delle estensioni più richieste è il supporto per le annotazioni. Utilizzando librerie come <name>Annotorious</name> o <name>Mirador</name>, sarà possibile:</p>
+          <list>
+            <item>Creare annotazioni sulle immagini</item>
+            <item>Collegare annotazioni a segmenti di testo TEI</item>
+            <item>Esportare annotazioni in formato W3C Web Annotation</item>
+            <item>Condividere e collaborare sulle annotazioni</item>
+          </list>
+        </div>
+
+        <div type="section">
+          <head>Ricerca Full-Text</head>
+          <p>L'implementazione di un sistema di ricerca permetterebbe di:</p>
+          <list>
+            <item>Cercare termini all'interno del testo TEI</item>
+            <item>Evidenziare i risultati nel viewer</item>
+            <item>Navigare tra le occorrenze trovate</item>
+          </list>
+        </div>
+
+        <div type="section">
+          <head>Multi-Documento</head>
+          <p>Il supporto per collezioni di documenti permetterebbe di:</p>
+          <list>
+            <item>Gestire biblioteche di documenti TEI</item>
+            <item>Navigare tra documenti correlati</item>
+            <item>Confrontare versioni diverse dello stesso testo</item>
+          </list>
+        </div>
+
+        <quote>L'obiettivo finale è creare uno strumento completo per gli studiosi di discipline umanistiche, che unisca la precisione della codifica TEI con la ricchezza visiva delle immagini digitali ad alta risoluzione.</quote>
+
+        <p>Questo è solo l'inizio di un percorso verso la creazione di strumenti sempre più sofisticati per l'analisi e la consultazione dei testi digitalizzati.</p>
+      </div>
+    </body>
+  </text>
+</TEI>
