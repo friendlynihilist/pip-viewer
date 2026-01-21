@@ -32,10 +32,8 @@ export default function App() {
         setLoading(true);
         setError(null);
 
-        // Load sample TEI file
-        // To use the full manuscript, download images and change to:
-        // const data = await parseTEI('/sample-data/hou02614c00333_tei.xml');
-        const data = await parseTEI('/sample-data/sample.xml');
+        // Load TEI file
+        const data = await parseTEI('/sample-data/hou02614c00333_tei.xml');
         setDocumentData(data);
         setLoading(false);
       } catch (err) {

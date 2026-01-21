@@ -36,6 +36,11 @@ cantaloupe/images/*
 !cantaloupe/images/README.md
 !cantaloupe/images/.gitkeep
 
+# Frontend images - ignore large image files
+frontend/public/images/*.jpg
+frontend/public/images/*.png
+!frontend/public/images/.gitkeep
+
 # Environment files
 .env
 .env.local
