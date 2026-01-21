@@ -31,81 +31,70 @@ pip-viewer/
 
 - **Frontend**: React 18 + Vite
 - **Image Viewer**: OpenSeadragon 5.0
-- **Image Server**: Cantaloupe IIIF Server
-- **Standard**: TEI (Text Encoding Initiative), IIIF Image API 2.0
+- **Standard**: TEI (Text Encoding Initiative)
+- **Zero external dependencies**: No Java, no IIIF server required
 
 ## Prerequisites
 
-- **Node.js** 18 or higher
-- **Java** 11 or higher (for Cantaloupe)
-- **npm** or **yarn**
+- **Node.js** 18 or higher ([download here](https://nodejs.org/))
 
-Check versions:
+That's it! No Java, no external servers, no complexity.
+
+Check if you have Node.js:
 ```bash
 node --version
-java -version
-npm --version
 ```
 
-## Quick Start (Test with Sample Data)
+## Quick Start
 
-**Try the viewer immediately with placeholder images:**
+**Never used a terminal before?** → See [SIMPLE-SETUP.md](SIMPLE-SETUP.md) for complete beginner instructions.
+
+**Experienced users:**
 
 ```bash
-# 1. Clone and setup
+# 1. Clone the repository
 git clone https://github.com/friendlynihilist/pip-viewer.git
-cd pip-viewer
-./setup.sh
+cd pip-viewer/frontend
 
-# 2. Create sample images
-./create-sample-images.sh
+# 2. Install dependencies
+npm install
 
-# 3. Start the application
-./start.sh
+# 3. Add your images to frontend/public/images/
+
+# 4. Start the application
+npm run dev
 ```
 
-The viewer will open at `http://localhost:5173` with a sample TEI document and 4 placeholder images.
+Open http://localhost:5173 in your browser.
 
 To stop: press `Ctrl+C`
 
-## Using the Full Manuscript
+## Using Your Own Manuscript
 
-To view the complete manuscript (700+ pages) with real images:
+### Step 1: Add Your Images
 
-### Step 1: Download Manuscript Images
+Copy your manuscript images to:
+```
+frontend/public/images/
+```
 
-The manuscript images need to be downloaded separately due to their size (~630MB).
+Images should be named like: `seq1.jpg`, `seq2.jpg`, etc. (or whatever your TEI XML references)
 
-**Download the images here**: [ADD YOUR LINK HERE]
+### Step 2: Add Your TEI XML File (Optional)
 
-After downloading, extract to `cantaloupe/images/`:
+1. Copy your XML file to `frontend/public/sample-data/`
+2. Edit `frontend/src/components/App.jsx` (line ~36):
+   ```javascript
+   const data = await parseTEI('/sample-data/your-file.xml');
+   ```
+
+### Step 3: Restart
 
 ```bash
-# Extract images archive
-unzip images.zip -d cantaloupe/images/
-# or
-tar -xzf images.tar.gz -C cantaloupe/images/
+npm run dev
 ```
 
-### Step 2: Update the TEI File Reference
-
-Edit `frontend/src/components/App.jsx` (line ~38):
-
-```javascript
-// Change from:
-const data = await parseTEI('/sample-data/sample.xml');
-
-// To:
-const data = await parseTEI('/sample-data/hou02614c00333_tei.xml');
-```
-
-### Step 3: Restart the Application
-
-```bash
-./start.sh
-```
-
-**To use your own documents**, see: [QUICK-START.md](QUICK-START.md)
+**For detailed instructions**, see: [SIMPLE-SETUP.md](SIMPLE-SETUP.md)
 
 ## Manual Installation (Alternative)
 
