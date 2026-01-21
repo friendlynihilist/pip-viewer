@@ -257,146 +257,116 @@ Edit `frontend/vite.config.js`:
 ```javascript
 export default defineConfig({
   server: {
-    port: 3000, // cambiare porta
+    port: 3000, // change port
   }
 })
 ```
 
-### Modificare la Porta di Cantaloupe
-
-1. Modificare `cantaloupe/cantaloupe.properties`:
-```properties
-http.port = 8080
-```
-
-2. Aggiornare `frontend/src/services/iiifService.js`:
-```javascript
-const IIIF_CONFIG = {
-  baseUrl: 'http://localhost:8080/iiif/2',
-  version: '2.0'
-};
-```
-
 ## Troubleshooting
 
-### Le immagini non si caricano
+### Images don't load
 
-**Problema**: Pannello destro mostra errore "Impossibile caricare l'immagine"
+**Problem**: Right panel shows "Unable to load image" error
 
-**Soluzioni**:
-1. Verificare che Cantaloupe sia in esecuzione: `http://localhost:8182`
-2. Testare l'accesso a un'immagine: `http://localhost:8182/iiif/2/page-1.jpg/info.json`
-3. Verificare che i nomi dei file corrispondano ai riferimenti nel TEI
-4. Controllare i log di Cantaloupe per errori
+**Solutions**:
+1. Make sure your images are in `frontend/public/images/`
+2. Check that image file names match the references in your TEI XML exactly
+3. Image names are case-sensitive on Mac/Linux
+4. Check browser console (F12) for detailed errors
 
-### Il file XML non viene caricato
+### XML file doesn't load
 
-**Problema**: Errore "Impossibile caricare il documento TEI"
+**Problem**: "Unable to load TEI document" error
 
-**Soluzioni**:
-1. Verificare che il file sia in `frontend/public/sample-data/`
-2. Controllare la sintassi XML (deve essere well-formed)
-3. Aprire la console del browser (F12) per vedere errori dettagliati
+**Solutions**:
+1. Make sure the file is in `frontend/public/sample-data/`
+2. Check XML syntax (must be well-formed)
+3. Open browser console (F12) to see detailed errors
 
-### Errori CORS
-
-**Problema**: Errori di Cross-Origin Resource Sharing
-
-**Soluzioni**:
-- Cantaloupe gestisce automaticamente CORS per IIIF
-- Assicurarsi che frontend e Cantaloupe siano sullo stesso host in produzione
-
-### Build per Produzione
+### Build for Production
 
 ```bash
 cd frontend
 npm run build
 ```
 
-I file compilati saranno in `frontend/dist/`. Servire con un web server statico (nginx, Apache, ecc.).
+The compiled files will be in `frontend/dist/`. Serve with a static web server (nginx, Apache, etc.).
 
-Per Cantaloupe in produzione, vedere: `cantaloupe/README.md`
+## Future Extensions
 
-## Estensioni Future
+The viewer is designed to be extensible. Future developments could include:
 
-Il viewer è progettato per essere estensibile. Sviluppi futuri potrebbero includere:
+- **IIIF Annotations**: Integration with Annotorious or Mirador
+- **Full-Text Search**: Search within TEI text with highlighting
+- **Multi-Document**: Managing collections of documents
+- **Export**: Export annotations in W3C Web Annotation format
+- **Scroll Synchronization**: Parallel scrolling between text and image
+- **Version Comparison**: Side-by-side visualization of different versions
 
-- **Annotazioni IIIF**: Integrazione con Annotorious o Mirador
-- **Ricerca Full-Text**: Ricerca nel testo TEI con evidenziazione
-- **Multi-Documento**: Gestione di collezioni di documenti
-- **Export**: Esportazione annotazioni in formato W3C Web Annotation
-- **Sincronizzazione Scroll**: Scroll parallelo tra testo e immagine
-- **Confronto Versioni**: Visualizzazione side-by-side di versioni diverse
-
-## Struttura del Codice
+## Code Structure
 
 ### Frontend
 
 ```
 frontend/src/
 ├── components/
-│   ├── App.jsx              # Componente principale, layout
-│   ├── XMLViewer.jsx        # Visualizzazione testo TEI
-│   ├── ImageViewer.jsx      # Integrazione OpenSeadragon
-│   └── Pagination.jsx       # Controlli navigazione
+│   ├── App.jsx              # Main component, layout
+│   ├── XMLViewer.jsx        # TEI text display
+│   ├── ImageViewer.jsx      # OpenSeadragon integration
+│   └── Pagination.jsx       # Navigation controls
 ├── services/
-│   ├── xmlParser.js         # Parser TEI, estrazione pagine
-│   └── iiifService.js       # Gestione URL IIIF
+│   ├── xmlParser.js         # TEI parser, page extraction
+│   └── iiifService.js       # Image URL management
 └── hooks/
-    └── usePagination.js     # Hook per stato paginazione
+    └── usePagination.js     # Pagination state hook
 ```
 
-### Servizi Chiave
+### Key Services
 
 **xmlParser.js**:
-- `parseTEI(path)`: Carica e parsa documento TEI
-- `extractPages(doc)`: Estrae pagine basate su `<pb>`
-- `extractMetadata(doc)`: Estrae metadati da `<teiHeader>`
+- `parseTEI(path)`: Loads and parses TEI document
+- `extractPages(doc)`: Extracts pages based on `<pb>` elements
+- `extractMetadata(doc)`: Extracts metadata from `<teiHeader>`
 
 **iiifService.js**:
-- `buildIIIFInfoUrl(id)`: Costruisce URL info.json
-- `buildTileSource(id)`: Crea tile source per OpenSeadragon
+- `buildImageUrl(id)`: Builds image URL
+- `buildTileSource(id)`: Creates tile source for OpenSeadragon
 
 **usePagination.js**:
-- Hook React per gestire stato paginazione e sincronizzazione
+- React hook for managing pagination state and synchronization
 
-## Contribuire
+## Contributing
 
-Contributi sono benvenuti! Aree di miglioramento:
+Contributions are welcome! Areas for improvement:
 
-1. Supporto per più elementi TEI
-2. Interfaccia per caricamento file
-3. Sistema di annotazioni
-4. Ricerca full-text
-5. Tests automatici
-6. Accessibilità (ARIA, keyboard navigation)
+1. Support for more TEI elements
+2. File upload interface
+3. Annotation system
+4. Full-text search
+5. Automated tests
+6. Accessibility (ARIA, keyboard navigation)
 
-## Risorse
+## Resources
 
 ### TEI
 - [TEI Guidelines](https://tei-c.org/guidelines/)
 - [TEI by Example](https://teibyexample.org/)
 
-### IIIF
-- [IIIF Image API](https://iiif.io/api/image/)
-- [IIIF Awesome](https://github.com/IIIF/awesome-iiif)
-
-### Librerie
+### Libraries
 - [OpenSeadragon](https://openseadragon.github.io/)
-- [Cantaloupe](https://cantaloupe-project.github.io/)
 - [React](https://react.dev/)
+- [Vite](https://vitejs.dev/)
 
-## Licenza
+## License
 
-[Specificare licenza - es. MIT, GPL, ecc.]
+MIT License - see [LICENSE](LICENSE) file for details.
 
-## Autori
+## Author
 
-[Specificare autori e contatti]
+Carlo Teo Pedretti
 
-## Ringraziamenti
+## Acknowledgments
 
 - TEI Consortium
-- IIIF Consortium
 - OpenSeadragon Team
-- Cantaloupe Project
+- React and Vite communities
