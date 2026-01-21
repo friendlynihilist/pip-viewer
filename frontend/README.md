@@ -1,6 +1,6 @@
 # Frontend - TEI-IIIF Viewer
 
-Applicazione React per la visualizzazione di documenti TEI con immagini IIIF.
+React application for viewing TEI documents with images.
 
 ## Setup
 
@@ -8,13 +8,13 @@ Applicazione React per la visualizzazione di documenti TEI con immagini IIIF.
 npm install
 ```
 
-## Sviluppo
+## Development
 
 ```bash
 npm run dev
 ```
 
-Apre il browser su `http://localhost:5173`
+Opens browser at `http://localhost:5173`
 
 ## Build
 
@@ -30,94 +30,82 @@ Output in `dist/`
 npm run preview
 ```
 
-## Struttura
+## Structure
 
 ```
 src/
-├── components/          # Componenti React
-│   ├── App.jsx         # Layout principale
-│   ├── XMLViewer.jsx   # Viewer testo TEI
-│   ├── ImageViewer.jsx # Viewer immagini IIIF
-│   └── Pagination.jsx  # Controlli navigazione
-├── services/           # Logica di business
-│   ├── xmlParser.js    # Parser documenti TEI
-│   └── iiifService.js  # Gestione URL IIIF
+├── components/          # React components
+│   ├── App.jsx         # Main layout
+│   ├── XMLViewer.jsx   # TEI text viewer
+│   ├── ImageViewer.jsx # Image viewer
+│   └── Pagination.jsx  # Navigation controls
+├── services/           # Business logic
+│   ├── xmlParser.js    # TEI document parser
+│   └── iiifService.js  # Image URL management
 ├── hooks/              # Custom React hooks
 │   └── usePagination.js
 └── main.jsx           # Entry point
 ```
 
-## Dipendenze Principali
+## Main Dependencies
 
 - **react**: ^18.3.1
 - **react-dom**: ^18.3.1
 - **openseadragon**: ^5.0.0
 - **vite**: ^5.4.11 (dev)
 
-## Configurazione
+## Configuration
 
-### Modificare il Server IIIF
+### Change Default TEI File
 
-Modificare `src/services/iiifService.js`:
-
-```javascript
-const IIIF_CONFIG = {
-  baseUrl: 'http://localhost:8182/iiif/2',  // Cambiare URL qui
-  version: '2.0'
-};
-```
-
-### Modificare il File TEI di Default
-
-Modificare `src/components/App.jsx`:
+Edit `src/components/App.jsx`:
 
 ```javascript
-const data = await parseTEI('/sample-data/sample.xml');  // Cambiare path qui
+const data = await parseTEI('/sample-data/your-file.xml');  // Change path here
 ```
 
-## Aggiungere Nuovi Documenti
+## Adding New Documents
 
-1. Posizionare il file XML in `public/sample-data/`
-2. Assicurarsi che le immagini referenziate siano in Cantaloupe
-3. Modificare App.jsx per caricare il nuovo file
+1. Place XML file in `public/sample-data/`
+2. Place images in `public/images/`
+3. Edit App.jsx to load the new file
 
 ## Debug
 
-Aprire la console del browser (F12) per vedere:
-- Errori di parsing XML
-- Errori di caricamento immagini
-- Log del parser TEI
+Open browser console (F12) to see:
+- XML parsing errors
+- Image loading errors
+- TEI parser logs
 
 ## Testing
 
-TODO: Aggiungere test con Vitest
+TODO: Add tests with Vitest
 
-## Produzione
+## Production
 
-Per il deploy:
+For deployment:
 
 1. Build: `npm run build`
-2. Servire i file in `dist/` con un web server statico
-3. Configurare il reverse proxy per Cantaloupe se necessario
-4. Verificare che i CORS siano configurati correttamente
+2. Serve files in `dist/` with a static web server
+3. Verify CORS is configured correctly
 
-## Estendere il Viewer
+## Extending the Viewer
 
-### Aggiungere Supporto per Nuovi Elementi TEI
+### Add Support for New TEI Elements
 
-Modificare `src/components/XMLViewer.jsx`, funzione `transformTEItoHTML`:
+Edit `src/components/XMLViewer.jsx`, function `transformTEItoHTML`:
 
 ```javascript
 const tagMap = {
   'p': 'p',
   'head': 'h3',
-  'nuovo-elemento': 'tag-html',  // Aggiungere qui
+  'new-element': 'html-tag',  // Add here
   // ...
 };
 ```
 
-### Aggiungere Nuove Funzionalità
+### Add New Features
 
-Creare nuovi componenti in `src/components/` e importarli in `App.jsx`.
+Create new components in `src/components/` and import them in `App.jsx`.
 
-Per funzionalità che richiedono stato condiviso, considerare l'uso di Context API o una libreria di state management.
+For features requiring shared state, consider using Context API or a state management library.
