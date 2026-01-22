@@ -62,8 +62,9 @@ async function buildImageMap() {
 
 /**
  * Builds IIIF URL from image identifier
+ * Strategy: First check if image exists locally, then fallback to IIIF manifest
  * @param {string} imageId - Image identifier (e.g., "seq1.jpg")
- * @returns {Promise<string>} - Full IIIF URL
+ * @returns {Promise<string>} - Full IIIF URL or local URL
  */
 export async function buildImageUrl(imageId) {
   if (!imageId) {
@@ -74,16 +75,34 @@ export async function buildImageUrl(imageId) {
   let cleanId = imageId.startsWith('/') ? imageId.substring(1) : imageId;
   cleanId = cleanId.startsWith('#') ? cleanId.substring(1) : cleanId;
 
-  // Get image map from manifest
-  const imageMap = await buildImageMap();
-
-  // Return IIIF URL from manifest if available
-  if (imageMap[cleanId]) {
-    return imageMap[cleanId];
+  // PRIORITY 1: Check if image exists locally
+  const localUrl = `/images/${cleanId}`;
+  try {
+    const response = await fetch(localUrl, { method: 'HEAD' });
+    if (response.ok) {
+      // Image exists locally - use it
+      console.log(`Using local image: ${localUrl}`);
+      return localUrl;
+    }
+  } catch (error) {
+    // Local image doesn't exist or fetch failed, continue to manifest
+    console.log(`Local image not found: ${localUrl}, trying manifest...`);
   }
 
-  // Fallback: construct local URL (for images not in manifest)
-  return `/images/${cleanId}`;
+  // PRIORITY 2: Try to get URL from IIIF manifest
+  try {
+    const imageMap = await buildImageMap();
+    if (imageMap[cleanId]) {
+      console.log(`Using IIIF URL from manifest for ${cleanId}`);
+      return imageMap[cleanId];
+    }
+  } catch (error) {
+    console.error('Error loading manifest:', error);
+  }
+
+  // FALLBACK: Return local URL anyway (will show error in UI if not found)
+  console.warn(`No image source found for ${cleanId}, defaulting to local path`);
+  return localUrl;
 }
 
 /**
