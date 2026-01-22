@@ -75,14 +75,18 @@ export async function buildImageUrl(imageId) {
   let cleanId = imageId.startsWith('/') ? imageId.substring(1) : imageId;
   cleanId = cleanId.startsWith('#') ? cleanId.substring(1) : cleanId;
 
-  // PRIORITY 1: Check if image exists locally
+  // PRIORITY 1: Check if image exists locally (with proper content-type check)
   const localUrl = `/images/${cleanId}`;
   try {
     const response = await fetch(localUrl, { method: 'HEAD' });
-    if (response.ok) {
+    // Check if it's actually an image, not a redirect to index.html
+    const contentType = response.headers.get('content-type');
+    if (response.ok && contentType && contentType.startsWith('image/')) {
       // Image exists locally - use it
       console.log(`Using local image: ${localUrl}`);
       return localUrl;
+    } else {
+      console.log(`Local check: ${localUrl} returned ${contentType}, not an image. Trying manifest...`);
     }
   } catch (error) {
     // Local image doesn't exist or fetch failed, continue to manifest
