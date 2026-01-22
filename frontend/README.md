@@ -66,6 +66,15 @@ const data = await parseTEI('/sample-data/your-file.xml');  // Change path here
 
 ## Adding New Documents
 
+### Option 1: With IIIF Manifest (Recommended)
+
+1. Place IIIF manifest in `public/manifest.json`
+2. Place XML file in `public/sample-data/`
+3. Ensure TEI references match manifest (seq1.jpg, seq2.jpg, etc.)
+4. Edit App.jsx to load the new file
+
+### Option 2: Local Images (Fallback)
+
 1. Place XML file in `public/sample-data/`
 2. Place images in `public/images/`
 3. Edit App.jsx to load the new file

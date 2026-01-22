@@ -20,10 +20,9 @@ pip-viewer/
 │   │   ├── services/     # TEI parser, IIIF service
 │   │   └── hooks/        # usePagination
 │   └── public/
-│       └── sample-data/  # Sample TEI files
-├── cantaloupe/           # Cantaloupe IIIF Server
-│   ├── images/          # Source images
-│   └── cache/           # Derived image cache
+│       ├── sample-data/  # Sample TEI files
+│       ├── manifest.json # IIIF manifest (links to external images)
+│       └── images/       # Optional: local images (fallback)
 └── README.md            # This file
 ```
 
@@ -31,7 +30,8 @@ pip-viewer/
 
 - **Frontend**: React 18 + Vite
 - **Image Viewer**: OpenSeadragon 5.0
-- **Standard**: TEI (Text Encoding Initiative)
+- **Standard**: TEI (Text Encoding Initiative) + IIIF
+- **Image Source**: IIIF Manifest (loads images from external IIIF servers)
 - **Zero external dependencies**: No Java, no IIIF server required
 
 ## Prerequisites
@@ -59,9 +59,7 @@ cd pip-viewer/frontend
 # 2. Install dependencies
 npm install
 
-# 3. Add your images to frontend/public/images/
-
-# 4. Start the application
+# 3. Start the application
 npm run dev
 ```
 
@@ -71,91 +69,33 @@ To stop: press `Ctrl+C`
 
 ## Using Your Own Manuscript
 
-### Step 1: Add Your Images
+This viewer supports two ways to load images:
 
-Copy your manuscript images to:
-```
-frontend/public/images/
-```
+### Option 1: IIIF Manifest (Recommended)
 
-Images should be named like: `seq1.jpg`, `seq2.jpg`, etc. (or whatever your TEI XML references)
+If you have a IIIF manifest with your manuscript images hosted on a IIIF server:
 
-### Step 2: Add Your TEI XML File (Optional)
-
-1. Copy your XML file to `frontend/public/sample-data/`
-2. Edit `frontend/src/components/App.jsx` (line ~36):
+1. Copy your IIIF manifest to `frontend/public/manifest.json`
+2. Make sure your TEI XML references match the canvas order (e.g., `seq1.jpg` for first canvas, `seq2.jpg` for second, etc.)
+3. Copy your TEI XML to `frontend/public/sample-data/your-file.xml`
+4. Edit `frontend/src/components/App.jsx` (line ~36):
    ```javascript
    const data = await parseTEI('/sample-data/your-file.xml');
    ```
 
-### Step 3: Restart
+**Benefits**: No need to host images locally, works on static hosting (Netlify, etc.), uses high-resolution IIIF images.
 
-```bash
-npm run dev
-```
+### Option 2: Local Images (Fallback)
 
-**For detailed instructions**, see: [SIMPLE-SETUP.md](SIMPLE-SETUP.md)
+If you don't have a IIIF manifest:
 
-## Manual Installation (Alternative)
+1. Copy your manuscript images to `frontend/public/images/`
+2. Images should be named to match your TEI references (e.g., `seq1.jpg`, `seq2.jpg`)
+3. Copy your TEI XML to `frontend/public/sample-data/your-file.xml`
+4. Edit `frontend/src/components/App.jsx` as above
 
-<details>
-<summary>Click to expand manual instructions</summary>
+**For detailed beginner instructions**, see: [SIMPLE-SETUP.md](SIMPLE-SETUP.md)
 
-### 1. Clone the Repository
-
-```bash
-git clone <repository-url>
-cd pip-viewer
-```
-
-### 2. Frontend Setup
-
-```bash
-cd frontend
-npm install
-cd ..
-```
-
-### 3. Cantaloupe Setup (IIIF Server)
-
-#### a) Download Cantaloupe
-
-```bash
-cd cantaloupe
-curl -OL https://github.com/cantaloupe-project/cantaloupe/releases/download/v5.0.6/cantaloupe-5.0.6.zip
-unzip cantaloupe-5.0.6.zip
-cd ..
-```
-
-#### b) Prepare the Images
-
-Copy images to the `cantaloupe/images/` directory:
-
-```bash
-# Example with placeholder images
-cd cantaloupe/images
-curl -o page-1.jpg "https://via.placeholder.com/2000x3000/cccccc/333333?text=Page+1"
-curl -o page-2.jpg "https://via.placeholder.com/2000x3000/cccccc/333333?text=Page+2"
-curl -o page-3.jpg "https://via.placeholder.com/2000x3000/cccccc/333333?text=Page+3"
-curl -o page-4.jpg "https://via.placeholder.com/2000x3000/cccccc/333333?text=Page+4"
-cd ../..
-```
-
-### 4. Manual Startup (2 Terminals)
-
-**Terminal 1 - Cantaloupe:**
-```bash
-cd cantaloupe
-java -Dcantaloupe.config=./cantaloupe.properties -Xmx2g -jar cantaloupe-5.0.6/cantaloupe-5.0.6.jar
-```
-
-**Terminal 2 - Frontend:**
-```bash
-cd frontend
-npm run dev
-```
-
-</details>
 
 ## Usage
 
@@ -225,28 +165,6 @@ The viewer automatically transforms the following TEI elements into HTML:
 | `<foreign>` | `<em>` | Foreign language text |
 | `<title>` | `<cite>` | Work title |
 
-## Using Your Own Documents
-
-**Simplified Procedure:**
-
-1. **Copy images** to `cantaloupe/images/`
-   ```bash
-   cp /path/to/your/images/*.jpg cantaloupe/images/
-   ```
-
-2. **Copy TEI file** to `frontend/public/sample-data/`
-   ```bash
-   cp /path/to/your/file.xml frontend/public/sample-data/my-document.xml
-   ```
-
-3. **Modify loading** in `frontend/src/components/App.jsx` (line ~20):
-   ```javascript
-   const data = await parseTEI('/sample-data/my-document.xml');
-   ```
-
-4. **Restart** with `./start.sh`
-
-**For full details and troubleshooting**, see [QUICK-START.md](QUICK-START.md)
 
 ## Configuration
 
@@ -329,8 +247,10 @@ frontend/src/
 - `extractMetadata(doc)`: Extracts metadata from `<teiHeader>`
 
 **iiifService.js**:
-- `buildImageUrl(id)`: Builds image URL
-- `buildTileSource(id)`: Creates tile source for OpenSeadragon
+- `loadManifest()`: Loads IIIF manifest from `/manifest.json`
+- `buildImageMap()`: Maps image IDs (seq1.jpg, seq2.jpg) to IIIF URLs from manifest
+- `buildImageUrl(id)`: Builds image URL (from manifest or local fallback)
+- `buildTileSource(id)`: Creates tile source for OpenSeadragon (IIIF info.json URL)
 
 **usePagination.js**:
 - React hook for managing pagination state and synchronization

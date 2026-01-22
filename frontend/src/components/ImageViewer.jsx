@@ -62,26 +62,27 @@ export default function ImageViewer({ imageId, pageNumber }) {
       setLoading(true);
       setError(null);
 
-      try {
-        const tileSource = buildTileSource(imageId);
+      // Load tile source asynchronously
+      buildTileSource(imageId)
+        .then(tileSource => {
+          if (tileSource) {
+            // Close current tile source before opening new one
+            if (viewerRef.current.world.getItemCount() > 0) {
+              viewerRef.current.close();
+            }
 
-        if (tileSource) {
-          // Close current tile source before opening new one
-          if (viewerRef.current.world.getItemCount() > 0) {
-            viewerRef.current.close();
+            // Open new tile source
+            viewerRef.current.open(tileSource);
+          } else {
+            setLoading(false);
+            setError('Invalid image ID');
           }
-
-          // Open new tile source
-          viewerRef.current.open(tileSource);
-        } else {
+        })
+        .catch(err => {
           setLoading(false);
-          setError('Invalid image ID');
-        }
-      } catch (err) {
-        setLoading(false);
-        setError('Error loading image');
-        console.error('ImageViewer error:', err);
-      }
+          setError('Error loading image');
+          console.error('ImageViewer error:', err);
+        });
     } else if (viewerRef.current && !imageId) {
       // No image to display
       if (viewerRef.current.world.getItemCount() > 0) {

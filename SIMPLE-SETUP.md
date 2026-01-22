@@ -80,7 +80,21 @@ Node.js is required to run this application.
 
    You'll see a lot of text scrolling - this is normal! Wait until you see a prompt again.
 
-## Step 4: Add Your Images
+## Step 4: Set Up Your Images
+
+You have two options for images:
+
+### Option A: Use IIIF Manifest (Recommended - No Local Images Needed!)
+
+If you have a IIIF manifest with links to online images:
+
+1. Navigate to: `pip-viewer/frontend/public/`
+2. Replace the existing `manifest.json` with your own IIIF manifest
+3. **Done!** Images will load directly from the IIIF server - no need to download them
+
+**This is perfect for large image collections and works great on free hosting like Netlify.**
+
+### Option B: Use Local Images (If You Don't Have a Manifest)
 
 1. Open your file explorer/finder
 2. Navigate to the project folder: `pip-viewer/frontend/public/images/`
