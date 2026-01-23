@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import InfoModal from './InfoModal';
 import './XMLViewer.css';
 
 /**
@@ -132,9 +133,10 @@ function transformTEItoHTML(xmlContent) {
 /**
  * Component for displaying TEI/XML text
  */
-export default function XMLViewer({ pageData }) {
+export default function XMLViewer({ pageData, metadata }) {
   const contentRef = useRef(null);
   const [viewMode, setViewMode] = useState('diplomatic'); // 'diplomatic' or 'reading'
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
   useEffect(() => {
     if (contentRef.current && pageData) {
@@ -164,13 +166,23 @@ export default function XMLViewer({ pageData }) {
     <div className="xml-viewer">
       <div className="page-info">
         <span className="page-number">Page {pageData.pageNumber}</span>
-        <button
-          className="view-toggle"
-          onClick={toggleViewMode}
-          title={viewMode === 'diplomatic' ? 'Switch to Reading View' : 'Switch to Diplomatic View'}
-        >
-          {viewMode === 'diplomatic' ? 'Reading View' : 'Diplomatic View'}
-        </button>
+        <div className="page-controls">
+          <button
+            className="info-button"
+            onClick={() => setShowInfoModal(true)}
+            title="Show TEI metadata"
+            aria-label="Information"
+          >
+            ⓘ
+          </button>
+          <button
+            className="view-toggle"
+            onClick={toggleViewMode}
+            title={viewMode === 'diplomatic' ? 'Switch to Reading View' : 'Switch to Diplomatic View'}
+          >
+            {viewMode === 'diplomatic' ? 'Reading View' : 'Diplomatic View'}
+          </button>
+        </div>
       </div>
       <div
         className={`xml-content ${viewMode === 'reading' ? 'reading-view' : ''}`}
@@ -178,6 +190,13 @@ export default function XMLViewer({ pageData }) {
       >
         {/* Content will be inserted via innerHTML */}
       </div>
+
+      <InfoModal
+        isOpen={showInfoModal}
+        onClose={() => setShowInfoModal(false)}
+        title="TEI Document Metadata"
+        metadata={metadata}
+      />
     </div>
   );
 }

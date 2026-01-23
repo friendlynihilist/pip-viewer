@@ -1,0 +1,141 @@
+/* Info Modal - Swiss/Minimalist Style */
+
+.info-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.info-modal {
+  background: #ffffff;
+  border: 2px solid #000000;
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.info-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 2px solid #000000;
+  background: #000000;
+  color: #ffffff;
+}
+
+.info-modal-header h2 {
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.info-modal-close {
+  background: transparent;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  font-size: 24px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  padding: 0;
+  line-height: 1;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.info-modal-close:hover {
+  background: #ffffff;
+  color: #000000;
+}
+
+.info-modal-content {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.metadata-list {
+  margin: 0;
+  padding: 0;
+}
+
+.metadata-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 20px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.metadata-item:last-child {
+  border-bottom: none;
+}
+
+.metadata-item dt {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+  color: #000000;
+}
+
+.metadata-item dd {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+  color: #000000;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.metadata-item dd a {
+  color: #000000;
+  text-decoration: underline;
+}
+
+.metadata-item dd a:hover {
+  text-decoration: none;
+}
+
+.no-metadata {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #666666;
+  text-align: center;
+  padding: 40px 20px;
+  margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .metadata-item {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .info-modal-header h2 {
+    font-size: 14px;
+  }
+}

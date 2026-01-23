@@ -3,6 +3,7 @@ import XMLViewer from './XMLViewer';
 import ImageViewer from './ImageViewer';
 import Pagination from './Pagination';
 import { parseTEI } from '../services/xmlParser';
+import { getManifestMetadata } from '../services/iiifService';
 import { usePagination } from '../hooks/usePagination';
 import './App.css';
 
@@ -11,6 +12,7 @@ import './App.css';
  */
 export default function App() {
   const [documentData, setDocumentData] = useState(null);
+  const [manifestMetadata, setManifestMetadata] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -25,16 +27,24 @@ export default function App() {
     isLastPage
   } = usePagination(documentData?.pages || []);
 
-  // Load TEI document on startup
+  // Load TEI document and IIIF manifest metadata on startup
   useEffect(() => {
     async function loadDocument() {
       try {
         setLoading(true);
         setError(null);
 
-        // Load TEI file
-        const data = await parseTEI('/sample-data/hou02614c00333_tei.xml');
+        // Load TEI file and manifest metadata in parallel
+        const [data, iiifMetadata] = await Promise.all([
+          parseTEI('/sample-data/hou02614c00333_tei.xml'),
+          getManifestMetadata().catch(err => {
+            console.warn('Could not load manifest metadata:', err);
+            return {};
+          })
+        ]);
+
         setDocumentData(data);
+        setManifestMetadata(iiifMetadata);
         setLoading(false);
       } catch (err) {
         console.error('Error loading document:', err);
@@ -96,13 +106,17 @@ export default function App() {
       <main className="main-content">
         <div className="split-view">
           <div className="panel left-panel">
-            <XMLViewer pageData={currentPageData} />
+            <XMLViewer
+              pageData={currentPageData}
+              metadata={documentData?.metadata}
+            />
           </div>
 
           <div className="panel right-panel">
             <ImageViewer
               imageId={currentPageData?.facsUrl}
               pageNumber={currentPageData?.pageNumber}
+              manifestMetadata={manifestMetadata}
             />
           </div>
         </div>

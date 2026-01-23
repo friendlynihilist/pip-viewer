@@ -160,3 +160,53 @@ export function extractImageId(facsRef) {
 
   return facsRef;
 }
+
+/**
+ * Extract metadata from IIIF manifest
+ * @returns {Promise<Object>} - Manifest metadata
+ */
+export async function getManifestMetadata() {
+  try {
+    const manifest = await loadManifest();
+
+    const metadata = {
+      title: manifest.label || 'Untitled',
+      id: manifest['@id'] || manifest.id,
+      type: manifest['@type'] || manifest.type,
+      license: manifest.license,
+      logo: manifest.logo,
+    };
+
+    // Extract sequences info
+    if (manifest.sequences && manifest.sequences[0]) {
+      const sequence = manifest.sequences[0];
+      metadata.sequenceId = sequence['@id'];
+      metadata.canvasCount = sequence.canvases ? sequence.canvases.length : 0;
+    }
+
+    // Extract metadata array if present
+    if (manifest.metadata && Array.isArray(manifest.metadata)) {
+      manifest.metadata.forEach(item => {
+        if (item.label && item.value) {
+          const key = item.label.replace(/[^a-zA-Z0-9]/g, '');
+          metadata[key] = item.value;
+        }
+      });
+    }
+
+    // Extract attribution if present
+    if (manifest.attribution) {
+      metadata.attribution = manifest.attribution;
+    }
+
+    // Extract description if present
+    if (manifest.description) {
+      metadata.description = manifest.description;
+    }
+
+    return metadata;
+  } catch (error) {
+    console.error('Error extracting manifest metadata:', error);
+    return {};
+  }
+}

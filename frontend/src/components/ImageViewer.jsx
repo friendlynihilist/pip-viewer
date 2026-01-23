@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import OpenSeadragon from 'openseadragon';
 import { buildTileSource } from '../services/iiifService';
+import InfoModal from './InfoModal';
 import './ImageViewer.css';
 
 /**
  * Component for displaying IIIF images with OpenSeadragon
  */
-export default function ImageViewer({ imageId, pageNumber }) {
+export default function ImageViewer({ imageId, pageNumber, manifestMetadata }) {
   const viewerRef = useRef(null);
   const containerRef = useRef(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
   useEffect(() => {
     // Initialize OpenSeadragon
@@ -96,8 +98,18 @@ export default function ImageViewer({ imageId, pageNumber }) {
   return (
     <div className="image-viewer">
       <div className="image-info">
-        {pageNumber && <span className="page-label">Page {pageNumber} image</span>}
-        {loading && <span className="status-message loading">Loading...</span>}
+        <div className="image-info-left">
+          {pageNumber && <span className="page-label">Page {pageNumber} image</span>}
+          {loading && <span className="status-message loading">Loading...</span>}
+        </div>
+        <button
+          className="info-button"
+          onClick={() => setShowInfoModal(true)}
+          title="Show IIIF manifest metadata"
+          aria-label="Information"
+        >
+          ⓘ
+        </button>
       </div>
 
       <div className="viewer-container">
@@ -134,6 +146,13 @@ export default function ImageViewer({ imageId, pageNumber }) {
           style={{ display: error || !imageId ? 'none' : 'block' }}
         />
       </div>
+
+      <InfoModal
+        isOpen={showInfoModal}
+        onClose={() => setShowInfoModal(false)}
+        title="IIIF Manifest Metadata"
+        metadata={manifestMetadata}
+      />
     </div>
   );
 }
