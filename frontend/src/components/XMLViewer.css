@@ -74,6 +74,8 @@
 .xml-content {
   flex: 1;
   overflow-y: auto;
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
   padding: 48px;
   font-family: 'Georgia', 'Times New Roman', serif;
   font-size: 15px;
@@ -85,6 +87,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.xml-content.transitioning {
+  opacity: 0;
 }
 
 /* Stili per elementi TEI trasformati */

@@ -137,14 +137,24 @@ export default function XMLViewer({ pageData, metadata }) {
   const contentRef = useRef(null);
   const [viewMode, setViewMode] = useState('diplomatic'); // 'diplomatic' or 'reading'
   const [showInfoModal, setShowInfoModal] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     if (contentRef.current && pageData) {
-      const htmlContent = transformTEItoHTML(pageData.xmlContent);
-      contentRef.current.innerHTML = htmlContent;
+      // Fade out
+      setIsTransitioning(true);
 
-      // Scroll to top when page changes
-      contentRef.current.scrollTop = 0;
+      // Wait for fade out, then update content
+      setTimeout(() => {
+        const htmlContent = transformTEItoHTML(pageData.xmlContent);
+        contentRef.current.innerHTML = htmlContent;
+        contentRef.current.scrollTop = 0;
+
+        // Fade in
+        setTimeout(() => {
+          setIsTransitioning(false);
+        }, 50);
+      }, 200);
     }
   }, [pageData]);
 
@@ -185,7 +195,7 @@ export default function XMLViewer({ pageData, metadata }) {
         </div>
       </div>
       <div
-        className={`xml-content ${viewMode === 'reading' ? 'reading-view' : ''}`}
+        className={`xml-content ${viewMode === 'reading' ? 'reading-view' : ''} ${isTransitioning ? 'transitioning' : ''}`}
         ref={contentRef}
       >
         {/* Content will be inserted via innerHTML */}

@@ -20,8 +20,8 @@ export default function ImageViewer({ imageId, pageNumber, manifestMetadata }) {
       viewerRef.current = OpenSeadragon({
         element: containerRef.current,
         prefixUrl: '//openseadragon.github.io/openseadragon/images/',
-        animationTime: 0.5,
-        blendTime: 0.1,
+        animationTime: 0.3,
+        blendTime: 0.3,
         constrainDuringPan: true,
         maxZoomPixelRatio: 2,
         minZoomLevel: 0.8,
